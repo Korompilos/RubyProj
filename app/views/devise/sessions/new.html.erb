@@ -2,13 +2,13 @@
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
 
   <div class="field">
-    <p><%= f.label :password %></p>
-    <p><%= f.password_field :password, autocomplete: "current-password" %></p>
+    <%= f.label :password %><br />
+    <%= f.password_field :password, autocomplete: "current-password" %>
   </div>
 
   <div class="actions">
@@ -17,7 +17,6 @@
 <% end %>
 
 <hr>
-
 <%= button_to "Log in with Google", user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: false } %>
 <%= button_to "Log in with Facebook", user_facebook_omniauth_authorize_path, method: :post, data: { turbo: false } %>
 
