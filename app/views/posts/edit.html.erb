@@ -1,0 +1,7 @@
+<h1>Edit Post</h1>
+<%= form_with(model: @post) do |f| %>
+  <%= f.text_area :content %>
+  <%= f.select :category, @lessons %>
+  <%= f.submit "Update" %>
+<% end %>
+<%= link_to "Cancel", posts_path %>
