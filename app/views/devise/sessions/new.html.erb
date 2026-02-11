@@ -17,7 +17,10 @@
 <% end %>
 
 <hr>
-<%= button_to "Log in with Google", user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: false } %>
+<%= button_to "Login with Google", user_google_oauth2_omniauth_authorize_path, 
+    method: :post, 
+    data: { turbo: false }, 
+    class: "google-btn" %>
 <%= button_to "Log in with Facebook", user_facebook_omniauth_authorize_path, method: :post, data: { turbo: false } %>
 
 <%= render "devise/shared/links" %>

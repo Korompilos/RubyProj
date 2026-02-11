@@ -1,1 +1,23 @@
-<h1>Welcome, <%= current_user.email %>!</h1>
+<h2>Διαχείριση Portal Εργαστηρίων</h2>
+
+<%= form_with(model: @post, local: true) do |f| %>
+  <div class="field">
+    <%= f.text_area :content, placeholder: "Γράψτε το μήνυμά σας εδώ...", rows: 3 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :category, "Κατηγορία:" %>
+    <%= f.select :category, [['Μαθήματα', 'lessons'], ['Ομάδες', 'teams'], ['Γενικά', 'general']] %>
+  </div>
+
+  <%= f.submit "Ανάρτηση Post" %>
+<% end %>
+
+<hr>
+
+<% @posts.each do |post| %>
+  <div class="post">
+    <strong><%= post.user.email %></strong> [<%= post.category %>]
+    <p><%= post.content %></p>
+  </div>
+<% end %>
