@@ -1,0 +1,32 @@
+<div class="portal-container">
+  <h2>Οι Επαφές μου</h2>
+  
+  <div class="posts-feed">
+    <% if @friends.any? %>
+      <% @friends.each do |friend| %>
+        <div class="post-card" style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="user-badge"><%= friend.email[0].upcase %></div>
+            <div>
+              <strong><%= friend.email %></strong>
+              <div style="font-size: 0.8rem; color: #28a745;">● Online</div>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 10px;">
+            <%# Αυτό το κουμπί θα ανοίγει το Chat αργότερα (Θέμα 4) %>
+            <button class="btn-primary" style="width: auto; padding: 5px 15px; background-color: #28a745;">Μήνυμα</button>
+            
+            <%= button_to "Αφαίρεση", friendship_path(friend), method: :delete, data: { confirm: "Σίγουρα;" }, class: "btn-delete", style: "padding: 5px 15px;" %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="post-card" style="text-align: center; color: #666;">
+        Δεν έχετε προσθέσει ακόμα επαφές. 
+        <br>
+        <%= link_to "Βρείτε φίλους εδώ", find_friends_path, style: "color: #007bff;" %>
+      </div>
+    <% end %>
+  </div>
+</div>
