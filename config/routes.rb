@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
-  get "posts/index"
+  root to: "posts#index"
+  
+  get 'find_friends', to: 'users#index'
+  
   devise_for :users, controllers: { 
     omniauth_callbacks: 'users/omniauth_callbacks' 
   }
   
-  root to: "posts#index" 
-  
   resources :posts
+  resources :friendships, only: [:create, :destroy]
 end

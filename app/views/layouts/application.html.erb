@@ -9,32 +9,34 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-  <nav>
-    <div class="logo"><strong>Course Manager</strong></div>
-    <div>
-      <% if user_signed_in? %>
-        <%= current_user.email %> | 
-        <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete } %>
-      <% else %>
-        <%= link_to "Log in", new_user_session_path %>
-      <% end %>
-    </div>
-  </nav>
+<body>
+  <% unless devise_controller? %>
+    <nav style="background: #007bff; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
+      <div class="logo"><strong>Course Manager</strong></div>
+      <div>
+        <% if user_signed_in? %>
+          <span style="margin-right: 10px;"><%= current_user.email %></span>
+          <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, style: "color: white; text-decoration: none; font-weight: bold;" %>
+        <% else %>
+          <%= link_to "Log in", new_user_session_path, style: "color: white; text-decoration: none;" %>
+        <% end %>
+      </div>
+    </nav>
+  <% end %>
 
-  <div class="main-wrapper">
-    <% if user_signed_in? %>
-      <aside class="sidebar">
-        <h3>Categories</h3>
-        <ul>
-          <li><%= link_to "Posts", posts_path %></li>
-          <li><%= link_to "Courses", posts_path(category: "lessons") %></li>
-          <li><%= link_to "Teams", posts_path(category: "teams") %></li>
-        </ul>
+  <div class="main-wrapper" style="display: flex; min-height: 100vh;">
+    <% if user_signed_in? && !devise_controller? %>
+      <aside class="sidebar" style="width: 200px; background: #f8f9fa; padding: 20px; border-right: 1px solid #dee2e6;">
+        <h3 style="color: #007bff;">Categories</h3>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 10px;"><%= link_to "All Posts", posts_path, style: "text-decoration: none; color: #333;" %></li>
+          <li style="margin-bottom: 10px;"><%= link_to "My Friends", posts_path(category: "friends"), style: "text-decoration: none; color: #333;" %></li>
+          <li><%= link_to "Find Friends", find_friends_path, style: "text-decoration: none; color: #333;" %></li>
+          </ul>
       </aside>
     <% end %>
 
-    <section class="content-area">
+    <section class="content-area" style="flex: 1; padding: 20px; <%= 'background: #f0f7ff;' if devise_controller? %>">
       <%= yield %>
     </section>
   </div>

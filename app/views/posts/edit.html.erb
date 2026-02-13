@@ -1,7 +1,29 @@
-<h1>Edit Post</h1>
-<%= form_with(model: @post) do |f| %>
-  <%= f.text_area :content %>
-  <%= f.select :category, @lessons %>
-  <%= f.submit "Update" %>
-<% end %>
-<%= link_to "Cancel", posts_path %>
+<div class="portal-container">
+  
+  <h1>Edit Post</h1>
+
+  <div class="new-post-card">
+    <%= form_with(model: @post) do |f| %>
+      <div class="field" style="margin-bottom: 20px;">
+        <%= f.label :content, "Body", style: "display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main);" %>
+        <%= f.text_area :content, 
+            rows: 6,
+            style: "width: 100%;" %>
+      </div>
+
+      <div class="field" style="margin-bottom: 20px;">
+        <%= f.label :category, "Course", style: "display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main);" %>
+        <%= f.select :category, 
+            @lessons, 
+            {}, 
+            { class: "styled-select", style: "width: 100%;" } %>
+      </div>
+
+      <div class="post-actions" style="justify-content: flex-start; gap: 12px;">
+        <%= f.submit "Save", class: "btn-primary" %>
+        <%= link_to "Cancel", posts_path, class: "btn-edit" %>
+      </div>
+    <% end %>
+  </div>
+
+</div>

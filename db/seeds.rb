@@ -7,3 +7,13 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+#dummy data 
+25.times do |i|
+  User.create!(
+    email: "user#{i+1}@example.com",
+    password: "123456",
+    password_confirmation: "123456"
+  )
+end
+puts "Δημιουργήθηκαν 25 dummy users!"

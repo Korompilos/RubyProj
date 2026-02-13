@@ -1,0 +1,19 @@
+<div class="portal-container">
+  <h2>Ανακάλυψη Χρηστών</h2>
+  <div class="posts-feed">
+    <% @users.each do |user| %>
+      <div class="post-card" style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <div class="user-badge"><%= user.email[0].upcase %></div>
+          <strong><%= user.email %></strong>
+        </div>
+        
+        <% if current_user.friends.include?(user) %>
+          <span class="category-tag">Ήδη στις επαφές</span>
+        <% else %>
+          <%= button_to "Προσθήκη", friendships_path(friend_id: user.id), method: :post, class: "btn-primary", style: "width: auto; padding: 5px 20px;" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
