@@ -14,8 +14,9 @@
           </div>
           
           <div style="display: flex; gap: 10px;">
-            <%# Αυτό το κουμπί θα ανοίγει το Chat αργότερα (Θέμα 4) %>
-            <button class="btn-primary" style="width: auto; padding: 5px 15px; background-color: #28a745;">Μήνυμα</button>
+            <%= link_to "Μήνυμα", user_path(friend), 
+                class: "btn-primary", 
+                style: "width: auto; padding: 5px 15px; background-color: #007bff; text-decoration: none; color: white; display: inline-block; border-radius: 8px;" %>
             
             <%= button_to "Αφαίρεση", friendship_path(friend), method: :delete, data: { confirm: "Σίγουρα;" }, class: "btn-delete", style: "padding: 5px 15px;" %>
           </div>
