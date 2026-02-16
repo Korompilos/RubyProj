@@ -1,44 +1,118 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Portal</title>
+    <title>Portal | Course Manager</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+      body { 
+        font-family: 'Inter', sans-serif; 
+        background-color: #f4f7f6;
+        color: #2d3436;
+      }
+      .navbar {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        z-index: 1030;
+      }
+      .sidebar {
+        width: 260px;
+        background: white;
+        border-right: 1px solid #e0e0e0;
+        transition: all 0.3s;
+      }
+      .sidebar .nav-link {
+        color: #636e72;
+        padding: 12px 20px;
+        font-weight: 500;
+        border-radius: 8px;
+        margin: 4px 10px;
+      }
+      .sidebar .nav-link:hover {
+        background: #f0f7ff;
+        color: #0d6efd;
+      }
+      .sidebar .nav-link.active {
+        background: #0d6efd;
+        color: white;
+      }
+      .content-area {
+        padding: 40px;
+        background: #f4f7f6;
+      }
+      .main-card {
+        background: white;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        padding: 25px;
+      }
+      .btn-primary { border-radius: 8px; font-weight: 600; }
+    </style>
+
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-<body>
+<body class="d-flex flex-column" style="min-height: 100vh;">
+  
   <% unless devise_controller? %>
-    <nav style="background: #007bff; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
-      <div class="logo"><strong>Course Manager</strong></div>
-      <div>
-        <% if user_signed_in? %>
-          <span style="margin-right: 10px;"><%= current_user.email %></span>
-          <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, style: "color: white; text-decoration: none; font-weight: bold;" %>
-        <% else %>
-          <%= link_to "Log in", new_user_session_path, style: "color: white; text-decoration: none;" %>
-        <% end %>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/"><i class="bi bi-mortarboard-fill me-2"></i>Course Manager</a>
+        
+        <div class="d-flex align-items-center">
+          <% if user_signed_in? %>
+            <div class="dropdown">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle me-1"></i> <%= current_user.email %>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item text-danger" %></li>
+              </ul>
+            </div>
+          <% else %>
+            <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-light btn-sm" %>
+          <% end %>
+        </div>
       </div>
     </nav>
   <% end %>
 
-  <div class="main-wrapper" style="display: flex; min-height: 100vh;">
+  <div class="d-flex flex-grow-1">
     <% if user_signed_in? && !devise_controller? %>
-      <aside class="sidebar" style="width: 200px; background: #f8f9fa; padding: 20px; border-right: 1px solid #dee2e6;">
-        <h3 style="color: #007bff;">Categories</h3>
-        <ul style="list-style: none; padding: 0;">
-          <li style="margin-bottom: 10px;"><%= link_to "All Posts", posts_path, style: "text-decoration: none; color: #333;" %></li>
-          <li style="margin-bottom: 10px;"><%= link_to "My Friends", my_friends_path, style: "text-decoration: none; color: #333;" %></li>
-          <li><%= link_to "Find Friends", find_friends_path, style: "text-decoration: none; color: #333;" %></li>
-          </ul>
+      <aside class="sidebar d-none d-md-block shadow-sm">
+        <div class="py-4">
+          <div class="px-4 mb-3 text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">Menu</div>
+          <nav class="nav flex-column">
+            <%= link_to posts_path, class: "nav-link #{'active' if current_page?(posts_path)}" do %>
+              <i class="bi bi-grid-1x2 me-2"></i> All Posts
+            <% end %>
+            <%= link_to my_friends_path, class: "nav-link #{'active' if current_page?(my_friends_path)}" do %>
+              <i class="bi bi-people me-2"></i> My Friends
+            <% end %>
+            <%= link_to find_friends_path, class: "nav-link #{'active' if current_page?(find_friends_path)}" do %>
+              <i class="bi bi-person-plus me-2"></i> Find Friends
+            <% end %>
+          </nav>
+        </div>
       </aside>
     <% end %>
 
-    <section class="content-area" style="flex: 1; padding: 20px; <%= 'background: #f0f7ff;' if devise_controller? %>">
-      <%= yield %>
-    </section>
+    <main class="content-area w-100">
+      <div class="<%= devise_controller? ? 'container d-flex justify-content-center align-items-center' : 'container-fluid' %>" style="<%= 'min-height: 80vh;' if devise_controller? %>">
+        <div class="<%= 'main-card' unless devise_controller? %>">
+          <%= yield %>
+        </div>
+      </div>
+    </main>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
