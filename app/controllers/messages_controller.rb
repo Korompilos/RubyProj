@@ -6,9 +6,14 @@ class MessagesController < ApplicationController
   @message = @room.messages.build(msg_params)
   @message.user = current_user
 
-  respond_to do |format|
-    if @message.save
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("new_message_form", partial: "messages/form", locals: { room: @room, message: Message.new }) }
+  if @message.save
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.append("messages", partial: "messages/message", locals: { message: @message, session_user_id: current_user.id }),
+          turbo_stream.replace("new_message_form", partial: "messages/form", locals: { room: @room, message: Message.new })
+        ]
+      end
       format.html { redirect_to @room }
     end
   end

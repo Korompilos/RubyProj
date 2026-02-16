@@ -2,11 +2,15 @@ class Room < ApplicationRecord
   has_many :messages, dependent: :destroy
   has_and_belongs_to_many :users 
   
-  validates_uniqueness_of :name
+  validates :name, presence: true, uniqueness: true
   
-  def self.create_private_room(users, room_name)
-    single_room = Room.create(name: room_name)
-    users.each { |user| single_room.users << user }
-    single_room
+  validate :validate_user_count
+
+  private
+
+  def validate_user_count
+    if users.size > 4
+      errors.add(:base, "Το group chat δεν μπορεί να έχει πάνω από 4 άτομα")
+    end
   end
 end

@@ -1,0 +1,14 @@
+<%# app/views/messages/_form.html.erb %>
+<%= form_with(model: [room, message], id: "new_message_form", class: "d-flex gap-2 align-items-center") do |f| %>
+  <div class="flex-grow-1">
+    <%= f.text_field :content, 
+        placeholder: "Γράψτε ένα μήνυμα...", 
+        class: "form-control rounded-pill px-4 py-2 border-2",
+        style: "background: #f1f5f9; border-color: transparent;",
+        autocomplete: "off" %>
+  </div>
+
+  <%= f.button type: :submit, class: "btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow", style: "width: 45px; height: 45px;" do %>
+    <i class="bi bi-send-fill"></i>
+  <% end %>
+<% end %>
