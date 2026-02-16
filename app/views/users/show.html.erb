@@ -1,37 +1,27 @@
 <div class="portal-container">
-  <div class="post-card" style="max-width: 600px; margin: 0 auto;">
-    <div class="post-header" style="border-bottom: 1px solid #eee; padding-bottom: 15px;">
-      <div class="user-badge"><%= @user.email[0].upcase %></div>
-      <h3 style="margin: 0;">Συνομιλία με <%= @user.email %></h3>
+  <div class="post-card shadow-sm" style="max-width: 700px; margin: 0 auto; border-radius: 16px; background: white;">
+    <div class="p-4 border-bottom d-flex align-items-center">
+      <% if @user %>
+        <div class="user-badge me-3 text-white" style="background: var(--bg-gradient);"><%= @user.email[0].upcase %></div>
+        <h4 class="mb-0 fw-bold text-primary">Συνομιλία με <%= @user.email %></h4>
+      <% end %>
     </div>
 
-    <%# Περιοχή μηνυμάτων με Auto-scroll %>
-    <div id="messages" 
-         data-controller="scroll" 
-         style="height: 400px; overflow-y: auto; padding: 20px; background: #f9f9f9; margin: 20px 0; border-radius: 8px;">
-      
-      <%# Αυτή η γραμμή συνδέει το κανάλι για Real-time %>
-      <%= turbo_stream_from @single_room %>
-      
-      <div id="messages_list">
-  <% @messages.each do |msg| %>
-    <%= render partial: 'messages/message', locals: { message: msg, session_user_id: current_user.id } %>
-  <% end %>
-</div>
-    </div>
+    <%= turbo_stream_from @single_room %>
 
-    <%# Φόρμα αποστολής μηνύματος %>
-    <%= form_with(model: [@single_room, @message], remote: true, 
-        html: { autocomplete: "off", data: { action: "turbo:submit-end->scroll#resetForm" } }) do |f| %>
-      <div style="display: flex; gap: 10px;">
-        <%= f.text_field :content, placeholder: "Γράψτε ένα μήνυμα...", 
-            style: "flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none;" %>
-        <%= f.submit "Στείλε", class: "btn-primary", style: "width: auto; padding: 0 25px; border-radius: 25px;" %>
+    <div id="messages_scroll" style="height: 400px; overflow-y: auto; padding: 20px; background: #f8fafc;">
+      <div id="messages">
+        <% @messages.each do |msg| %>
+          <%= render partial: 'messages/message', locals: { message: msg, session_user_id: current_user.id } %>
+        <% end %>
       </div>
-    <% end %>
-  </div>
-  
-  <div style="text-align: center; margin-top: 20px;">
-    <%= link_to "← Επιστροφή στις Επαφές", my_friends_path, style: "color: #888; text-decoration: none;" %>
+    </div>
+
+    <div class="p-4 border-top">
+      <%= form_with(model: [@single_room, @message], remote: true, class: "d-flex gap-2") do |f| %>
+        <%= f.text_field :content, placeholder: "Γράψτε κάτι...", class: "form-control rounded-pill px-4" %>
+        <%= f.submit "Στείλε", class: "btn btn-primary rounded-pill px-4" %>
+      <% end %>
+    </div>
   </div>
 </div>

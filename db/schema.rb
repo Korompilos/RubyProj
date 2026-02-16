@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_13_171849) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_16_215957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_13_171849) do
     t.boolean "is_private", default: false
     t.string "name"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "rooms_users", id: false, force: :cascade do |t|
+    t.bigint "room_id", null: false
+    t.bigint "user_id", null: false
   end
 
   create_table "users", force: :cascade do |t|

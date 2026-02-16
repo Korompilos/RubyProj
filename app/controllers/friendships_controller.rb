@@ -8,8 +8,17 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
-    @friendship = current_user.friendships.find_by(friend_id: params[:id])
-    @friendship.destroy
-    redirect_back(fallback_location: root_path, notice: "Removed from your friends.")
+    @friendship = Friendship.where(user_id: current_user.id, friend_id: params[:id])
+                          .or(Friendship.where(user_id: params[:id], friend_id: current_user.id))
+                          .first
+
+    if @friendship
+      @friendship.destroy
+      flash[:notice] = "Removed from your friends."
+    else
+      flash[:alert] = "Friendship not found."
+    end
+
+    redirect_back(fallback_location: root_path)
   end
 end

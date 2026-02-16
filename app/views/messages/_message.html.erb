@@ -1,13 +1,28 @@
-<div id="<%= dom_id message %>" 
-     style="display: flex; justify-content: <%= message.user_id == session_user_id ? 'flex-end' : 'flex-start' %>; margin-bottom: 10px;">
-  
-  <div style="padding: 10px; border-radius: 15px; background: <%= message.user_id == session_user_id ? '#007bff; color: white;' : '#eee;' %>; position: relative;">
-    <%= message.content %>
+<% current_user_id = local_assigns[:session_user_id] %>
+<% is_me = (message.user_id == current_user_id) %>
 
-    <% if message.user_id == session_user_id %>
-      <%= link_to "×", room_message_path(message.room, message), 
-          data: { turbo_method: :delete, turbo_confirm: "Διαγραφή μηνύματος;" }, 
-          style: "margin-left: 10px; color: white; text-decoration: none; font-weight: bold; cursor: pointer;" %>
-    <% end %>
+<div id="<%= dom_id message %>" class="d-flex <%= is_me ? 'justify-content-end' : 'justify-content-start' %> mb-3 animate-fadeIn">
+  <div class="p-3 rounded-4 shadow-sm position-relative <%= is_me ? 'bg-primary text-white' : 'bg-white border text-dark' %>" 
+       style="max-width: 75%; border-bottom-<%= is_me ? 'right' : 'left' %>-radius: 2px !important;">
+    
+    <div style="font-size: 0.95rem; line-height: 1.4;">
+      <%= message.content %>
+    </div>
+    
+    <div class="d-flex justify-content-between align-items-center mt-2 border-top border-white border-opacity-10 pt-1">
+      <small style="font-size: 0.65rem; opacity: 0.7;">
+        <%= message.created_at.strftime("%H:%M") %>
+      </small>
+      
+      <% if is_me %>
+        <%= button_to room_message_path(message.room, message), 
+            method: :delete, 
+            data: { turbo_confirm: "Σίγουρα;" }, 
+            class: "btn p-0 border-0 bg-transparent text-white opacity-50 ms-2 fw-bold",
+            style: "line-height: 1; font-size: 1.1rem;" do %>
+          &times;
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>

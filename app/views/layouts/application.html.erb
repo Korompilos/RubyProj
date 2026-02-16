@@ -24,7 +24,7 @@
         width: 260px;
         background: white;
         border-right: 1px solid #e0e0e0;
-        transition: all 0.3s;
+        min-height: calc(100vh - 60px);
       }
       .sidebar .nav-link {
         color: #636e72;
@@ -48,11 +48,9 @@
       .main-card {
         background: white;
         border-radius: 12px;
-        border: none;
         box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         padding: 25px;
       }
-      .btn-primary { border-radius: 8px; font-weight: 600; }
     </style>
 
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
@@ -63,21 +61,19 @@
   
   <% unless devise_controller? %>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-      <div class="container-fluid">
+      <div class="container-fluid px-4">
         <a class="navbar-brand fw-bold" href="/"><i class="bi bi-mortarboard-fill me-2"></i>Course Manager</a>
         
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center gap-3">
           <% if user_signed_in? %>
-            <div class="dropdown">
-              <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle me-1"></i> <%= current_user.email %>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item text-danger" %></li>
-              </ul>
-            </div>
+            <span class="text-white d-none d-sm-inline small">
+              <i class="bi bi-person-circle me-1"></i> <%= current_user.email %>
+            </span>
+            <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-light btn-sm fw-bold text-danger rounded-pill px-3" do %>
+              <i class="bi bi-box-arrow-right me-1"></i> Logout
+            <% end %>
           <% else %>
-            <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-light btn-sm" %>
+            <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-light btn-sm rounded-pill px-3" %>
           <% end %>
         </div>
       </div>
@@ -87,7 +83,7 @@
   <div class="d-flex flex-grow-1">
     <% if user_signed_in? && !devise_controller? %>
       <aside class="sidebar d-none d-md-block shadow-sm">
-        <div class="py-4">
+        <div class="py-4 sticky-top" style="top: 70px;">
           <div class="px-4 mb-3 text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">Menu</div>
           <nav class="nav flex-column">
             <%= link_to posts_path, class: "nav-link #{'active' if current_page?(posts_path)}" do %>
@@ -106,7 +102,7 @@
 
     <main class="content-area w-100">
       <div class="<%= devise_controller? ? 'container d-flex justify-content-center align-items-center' : 'container-fluid' %>" style="<%= 'min-height: 80vh;' if devise_controller? %>">
-        <div class="<%= 'main-card' unless devise_controller? %>">
+        <div class="<%= 'main-card' unless devise_controller? %> w-100">
           <%= yield %>
         </div>
       </div>
