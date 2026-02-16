@@ -1,20 +1,13 @@
-<% is_current_user = (message.user_id == session_user_id) %>
-
-<div id="<%= dom_id message %>" class="message-row" 
-     style="display: flex; justify-content: <%= is_current_user ? 'flex-end' : 'flex-start' %>; margin-bottom: 12px; width: 100%;">
+<div id="<%= dom_id message %>" 
+     style="display: flex; justify-content: <%= message.user_id == session_user_id ? 'flex-end' : 'flex-start' %>; margin-bottom: 10px;">
   
-  <div style="max-width: 75%; position: relative;">
-    <div style="padding: 10px 15px; border-radius: 18px; font-size: 0.95rem; line-height: 1.4;
-                background-color: <%= is_current_user ? '#007bff' : '#e9ecef' %>; 
-                color: <%= is_current_user ? 'white' : '#333' %>;
-                border-bottom-<%= is_current_user ? 'right' : 'left' %>-radius: 4px;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
-      
-      <%= message.content %>
-    </div>
-    
-    <small style="display: block; font-size: 0.7rem; color: #888; margin-top: 4px; text-align: <%= is_current_user ? 'right' : 'left' %>;">
-      <%= message.created_at.strftime("%H:%M") %>
-    </small>
+  <div style="padding: 10px; border-radius: 15px; background: <%= message.user_id == session_user_id ? '#007bff; color: white;' : '#eee;' %>; position: relative;">
+    <%= message.content %>
+
+    <% if message.user_id == session_user_id %>
+      <%= link_to "×", room_message_path(message.room, message), 
+          data: { turbo_method: :delete, turbo_confirm: "Διαγραφή μηνύματος;" }, 
+          style: "margin-left: 10px; color: white; text-decoration: none; font-weight: bold; cursor: pointer;" %>
+    <% end %>
   </div>
 </div>

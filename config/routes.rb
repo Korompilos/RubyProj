@@ -13,6 +13,6 @@ Rails.application.routes.draw do
   resources :friendships, only: [:create, :destroy]
 
   resources :rooms do
-    resources :messages
+    resources :messages, only: [:create, :destroy]
   end
 end
