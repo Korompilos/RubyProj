@@ -5,7 +5,7 @@ class PostsController < ApplicationController
   def index
     @lessons = ["Algebra I", "Algebra II", "C#", "Operating Systems", "Databases", "Python", "Android Studio"]
     
-    @posts = Post.all.includes(:user).order(created_at: :desc)
+    @posts = Post.includes(:user).order(created_at: :desc)
 
     if params[:category].present?
       @posts = @posts.where(category: params[:category])
@@ -15,8 +15,9 @@ class PostsController < ApplicationController
       @posts = @posts.where("content ILIKE ?", "%#{params[:query]}%")
     end
 
-    @post = Post.new
+    @posts = @posts.page(params[:page]).per(5)
 
+    @post = Post.new
     @recent_activity = Post.order(created_at: :desc).limit(4)
   end
 

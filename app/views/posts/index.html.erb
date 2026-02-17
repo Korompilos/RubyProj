@@ -86,6 +86,9 @@
         </div>
       <% end %>
     </div>
+    <div class="d-flex justify-content-center mt-4 mb-5">
+      <%= paginate @posts %>
+    </div>
   </main>
 
   <aside class="sidebar-column">
@@ -93,7 +96,7 @@
   <section class="glass-card notification-card animate-fadeIn">
         <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-2">
           <i class="bi bi-bell-fill text-warning"></i>
-          <h6 class="fw-bold m-0 text-dark">Νέα Δραστηριότητα</h6>
+          <h6 class="fw-bold m-0 text-dark">Recent activity</h6>
         </div>
 
         <div class="activity-list">
@@ -108,14 +111,14 @@
                 <div class="activity-info">
                   <p class="m-0 activity-text">
                     <span class="fw-bold text-dark"><%= activity.user.email.split('@').first %></span>
-                    <span class="text-muted">δημοσίευσε στο</span>
+                    <span class="text-muted">posted at</span>
                   </p>
                   <div class="d-flex align-items-center gap-2 mt-1">
                     <span class="badge bg-light text-primary border border-primary-subtle" style="font-size: 0.65rem;">
                       <%= activity.category %>
                     </span>
                     <small class="text-muted x-small-text">
-                      <%= time_ago_in_words(activity.created_at) %> πριν
+                      <%= time_ago_in_words(activity.created_at) %> ago
                     </small>
                   </div>
                 </div>
@@ -123,7 +126,7 @@
               <% end %>
             <% end %>
           <% else %>
-            <p class="text-muted small text-center my-2">Καμία πρόσφατη δραστηριότητα.</p>
+            <p class="text-muted small text-center my-2">No recent activity.</p>
           <% end %>
         </div>
       </section>
