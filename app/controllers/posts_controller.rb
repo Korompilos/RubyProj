@@ -27,7 +27,7 @@ class PostsController < ApplicationController
     @my_private_chats = all_my_rooms.where(is_private: true)
     @my_group_chats   = all_my_rooms.where(is_private: false)
 
-    @friends = User.where.not(id: current_user.id)
+    @friends = current_user.friends
   end
 
   def create
