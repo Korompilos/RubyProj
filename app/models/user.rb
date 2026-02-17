@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
+         :recoverable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2, :facebook]
 
   has_and_belongs_to_many :rooms
