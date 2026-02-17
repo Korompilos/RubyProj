@@ -20,27 +20,6 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.08);
         z-index: 1030;
       }
-      .sidebar {
-        width: 260px;
-        background: white;
-        border-right: 1px solid #e0e0e0;
-        min-height: calc(100vh - 60px);
-      }
-      .sidebar .nav-link {
-        color: #636e72;
-        padding: 12px 20px;
-        font-weight: 500;
-        border-radius: 8px;
-        margin: 4px 10px;
-      }
-      .sidebar .nav-link:hover {
-        background: #f0f7ff;
-        color: #0d6efd;
-      }
-      .sidebar .nav-link.active {
-        background: #0d6efd;
-        color: white;
-      }
       .content-area {
         padding: 40px;
         background: #f4f7f6;
@@ -50,6 +29,36 @@
         border-radius: 12px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         padding: 25px;
+      }
+
+      .btn-back-global {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: white;
+        color: #555;
+        padding: 8px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border: 1px solid #dee2e6;
+        transition: all 0.2s ease;
+        width: fit-content;
+      }
+
+      .btn-back-global i {
+        font-size: 1.1rem;
+        color: #0d6efd; 
+      }
+
+      .btn-back-global:hover {
+        transform: translateX(-3px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        color: #0d6efd;
+        background: #f8f9fa;
+        border-color: #0d6efd;
       }
     </style>
 
@@ -82,10 +91,18 @@
 
   <div class="d-flex flex-grow-1">
     
-
     <main class="content-area w-100">
       <div class="<%= devise_controller? ? 'container d-flex justify-content-center align-items-center' : 'container-fluid' %>" style="<%= 'min-height: 80vh;' if devise_controller? %>">
         <div class="<%= 'main-card' unless devise_controller? %> w-100">
+          
+          <% if user_signed_in? && !current_page?(root_path) && !devise_controller? %>
+            <div class="mb-4 animate-fadeIn">
+              <%= link_to root_path, class: "btn-back-global" do %>
+                <i class="bi bi-arrow-left-circle-fill"></i> Back to Dashboard
+              <% end %>
+            </div>
+          <% end %>
+
           <%= yield %>
         </div>
       </div>

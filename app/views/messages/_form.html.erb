@@ -1,4 +1,4 @@
 <%= form_with(model: [room, message], id: "new_message_form", class: "d-flex gap-2") do |f| %>
-  <%= f.text_field :content, placeholder: "Γράψτε ένα μήνυμα...", class: "form-control rounded-pill" %>
+  <%= f.text_field :content, placeholder: "Type a message...", class: "form-control rounded-pill" %>
   <button type="submit" class="btn btn-primary rounded-circle"><i class="bi bi-send"></i></button>
 <% end %>

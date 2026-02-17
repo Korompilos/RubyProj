@@ -6,7 +6,7 @@ class RoomsController < ApplicationController
     
     if selected_user_ids.count < 2
       return redirect_back fallback_location: root_path, 
-                           alert: "Επιλέξτε τουλάχιστον 2 φίλους για να ξεκινήσετε ομαδική συνομιλία."
+                           alert: "Choose at least 2 friends to start a group chat."
     end
 
     all_participant_ids = selected_user_ids << current_user.id.to_s
@@ -18,7 +18,7 @@ class RoomsController < ApplicationController
     if @room.save
       redirect_to room_path(@room), status: :see_other
     else
-      redirect_back fallback_location: root_path, alert: "Σφάλμα κατά τη δημιουργία."
+      redirect_back fallback_location: root_path, alert: "Error."
     end
   end
 

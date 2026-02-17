@@ -21,7 +21,12 @@ class Room < ApplicationRecord
       other_user ? other_user.email.split('@').first : "Συνομιλία"
     else
       names = users.where.not(id: current_user.id).map { |u| u.email.split('@').first }
-      "Group: #{names.join(', ')}".truncate(35)
+      
+      if names.any?
+        "Group: #{names.join(', ')}".truncate(30)
+      else
+        "Group (Κενό)" 
+      end
     end
   end
 

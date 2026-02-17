@@ -28,12 +28,9 @@
         </div>
       </div>
 
-      <%= link_to my_friends_path, class: "btn btn-light btn-sm rounded-circle shadow-sm", title: "Back to my contacts" do %>
-        <i class="bi bi-chevron-left"></i>
-      <% end %>
+      
     </div>
 
-    <%# Real-time Messages Area %>
     <%= turbo_stream_from @single_room %>
     
     <div id="messages_scroll_container" 

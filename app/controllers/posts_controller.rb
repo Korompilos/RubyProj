@@ -19,6 +19,15 @@ class PostsController < ApplicationController
 
     @post = Post.new
     @recent_activity = Post.order(created_at: :desc).limit(4)
+
+    my_room_ids = Participant.where(user_id: current_user.id).pluck(:room_id)
+
+    all_my_rooms = Room.where(id: my_room_ids)
+
+    @my_private_chats = all_my_rooms.where(is_private: true)
+    @my_group_chats   = all_my_rooms.where(is_private: false)
+
+    @friends = User.where.not(id: current_user.id)
   end
 
   def create
