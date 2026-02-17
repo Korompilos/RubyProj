@@ -56,7 +56,7 @@
             </div>
             <div class="user-info">
               <strong><%= post.user.email.split('@').first %></strong>
-              <small>🕐 <%= time_ago_in_words(post.created_at) %> πριν</small>
+              <small><%= time_ago_in_words(post.created_at) %> ago</small>
             </div>
             <span class="category-tag">
               <%= post.category %>

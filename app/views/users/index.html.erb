@@ -1,5 +1,5 @@
 <div class="portal-container">
-  <h2>Ανακάλυψη Χρηστών</h2>
+  <h2>Discover Friends</h2>
   <div class="posts-feed">
     <% @users.each do |user| %>
       <div class="post-card" style="display: flex; align-items: center; justify-content: space-between;">
@@ -9,9 +9,9 @@
         </div>
         
         <% if current_user.friends.include?(user) %>
-          <span class="category-tag">Ήδη στις επαφές</span>
+          <span class="category-tag">Already Added</span>
         <% else %>
-          <%= button_to "Προσθήκη", friendships_path(friend_id: user.id), method: :post, class: "btn-primary", style: "width: auto; padding: 5px 20px;" %>
+          <%= button_to "Add", friendships_path(friend_id: user.id), method: :post, class: "btn-primary", style: "width: auto; padding: 5px 20px;" %>
         <% end %>
       </div>
     <% end %>

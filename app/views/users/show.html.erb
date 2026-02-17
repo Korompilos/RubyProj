@@ -3,7 +3,6 @@
     
     <div class="p-4 border-bottom bg-white d-flex align-items-center justify-content-between">
       <div class="d-flex align-items-center">
-        <%# Εικονίδιο Χρήστη ή Group %>
         <div class="user-badge me-3 shadow-sm" style="background: var(--bg-gradient); color: white; width: 50px; height: 50px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
           <% if @single_room.users.count > 2 %>
             <i class="bi bi-people-fill"></i>
@@ -16,21 +15,20 @@
         <div>
           <h4 class="mb-0 fw-bold text-dark">
             <% if @single_room.users.count > 2 %>
-              Ομαδική Συνομιλία
+              Group chat
             <% else %>
               <% other_user = @user || @single_room.users.where.not(id: current_user.id).first %>
-              Συνομιλία με <%= other_user&.email %>
+              Chat with <%= other_user&.email %>
             <% end %>
           </h4>
           <small class="text-muted">
             <i class="bi bi-person-check-fill me-1 text-success"></i>
-            <%# Εμφάνιση ονομάτων όλων των συμμετεχόντων %>
             <%= @single_room.users.map { |u| u.email.split('@').first }.join(", ") %>
           </small>
         </div>
       </div>
 
-      <%= link_to my_friends_path, class: "btn btn-light btn-sm rounded-circle shadow-sm", title: "Πίσω στις Επαφές" do %>
+      <%= link_to my_friends_path, class: "btn btn-light btn-sm rounded-circle shadow-sm", title: "Back to my contacts" do %>
         <i class="bi bi-chevron-left"></i>
       <% end %>
     </div>
@@ -41,7 +39,6 @@
     <div id="messages_scroll_container" 
          style="height: 500px; overflow-y: auto; padding: 25px; background-color: #f8fafc; scroll-behavior: smooth;">
       
-      <%# Το ID "messages" είναι απαραίτητο για το broadcast από το μοντέλο %>
       <div id="messages">
         <% @messages.each do |msg| %>
           <%= render partial: 'messages/message', locals: { message: msg, session_user_id: current_user.id } %>
@@ -49,7 +46,6 @@
       </div>
     </div>
 
-    <%# Περιοχή Φόρμας - Χρησιμοποιούμε Partial για να αποφύγουμε το Template Missing Error %>
     <div id="message_form_container" class="p-4 border-top bg-white">
       <%= render partial: 'messages/form', locals: { room: @single_room, message: @message } %>
     </div>

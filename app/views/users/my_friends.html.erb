@@ -1,13 +1,12 @@
 <div class="portal-container">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0 fw-bold">Οι Επαφές μου</h2>
+    <h2 class="mb-0 fw-bold">My Contacts</h2>
     <% if @friends.any? %>
-      <span class="badge bg-primary rounded-pill px-3"><%= @friends.count %> Φίλοι</span>
+      <span class="badge bg-primary rounded-pill px-3"><%= @friends.count %> Friends</span>
     <% end %>
   </div>
 
   <% if @friends.any? %>
-    <%# Η κύρια φόρμα για το Group Chat %>
     <%= form_with url: rooms_path, method: :post, id: "group-chat-form", data: { turbo: false } do |f| %>
       <div class="posts-feed">
         <% @friends.each do |friend| %>
@@ -30,14 +29,13 @@
             
             <div style="display: flex; gap: 10px; align-items: center;">
               <%= link_to user_path(friend), class: "btn btn-primary btn-sm rounded-pill px-3 text-decoration-none shadow-sm" do %>
-                <i class="bi bi-chat-fill"></i> Μήνυμα
+                <i class="bi bi-chat-fill"></i> Message
               <% end %>
               
-              <%# ΔΙΟΡΘΩΣΗ: link_to με turbo_method αντί για button_to για αποφυγή nested forms %>
               <%= link_to friendship_path(friend), 
-                  data: { turbo_method: :delete, turbo_confirm: "Σίγουρα;" }, 
+                  data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, 
                   class: "btn btn-outline-danger btn-sm rounded-pill px-3 shadow-sm text-decoration-none" do %>
-                <i class="bi bi-person-x-fill"></i> Αφαίρεση
+                <i class="bi bi-person-x-fill"></i> Remove
               <% end %>
             </div>
           </div>
@@ -47,18 +45,18 @@
 
     <div class="sticky-bottom bg-white p-3 border-top mt-4 shadow-lg rounded-4 d-flex justify-content-between align-items-center" style="z-index: 1050;">
       <div class="ps-2">
-        <h6 class="mb-0 fw-bold text-primary">Δημιουργία Ομαδικής</h6>
-        <small class="text-muted">Επιλέξτε έως 3 φίλους (max 4 άτομα)</small>
+        <h6 class="mb-0 fw-bold text-primary">Create Group Chat</h6>
+        <small class="text-muted">Select 2 or 3 friends (chat with max 4 people)</small>
       </div>
       <button type="submit" form="group-chat-form" class="btn btn-success rounded-pill px-5 fw-bold shadow">
-        Έναρξη Group Chat
+        Create Group Chat
       </button>
     </div>
 
   <% else %>
     <div class="post-card shadow-sm text-center p-5" style="background: white; border-radius: 20px;">
-      <h4 class="mt-3 fw-bold">Δεν έχετε επαφές</h4>
-      <%= link_to "Αναζήτηση Φίλων", find_friends_path, class: "btn btn-primary rounded-pill mt-2" %>
+      <h4 class="mt-3 fw-bold">No contacts...</h4>
+      <%= link_to "Discover Friends", find_friends_path, class: "btn btn-primary rounded-pill mt-2" %>
     </div>
   <% end %>
 </div>
