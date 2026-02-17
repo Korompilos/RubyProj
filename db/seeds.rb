@@ -28,10 +28,8 @@ puts "Δημιουργήθηκαν 25 dummy users!"
 
 puts "--- Ξεκινάει η διαδικασία Seeding ---"
 
-# 1. Δημιουργία 25 Dummy Users (Αν δεν υπάρχουν ήδη)
 25.times do |i|
   email = "user#{i+1}@example.com"
-  # Το find_or_create_by ελέγχει αν υπάρχει το email πριν το φτιάξει (για να μην κρασάρει)
   User.find_or_create_by!(email: email) do |user|
     user.password = "123456"
     user.password_confirmation = "123456"
@@ -39,14 +37,11 @@ puts "--- Ξεκινάει η διαδικασία Seeding ---"
 end
 puts "✅ Ελέγχθηκαν/Δημιουργήθηκαν 25 dummy users."
 
-# 2. Βρίσκουμε τους χρήστες που θέλουμε για τη συζήτηση
-# Ψάχνουμε με email για σιγουριά, αντί για ID
 u1  = User.find_by(email: "user1@example.com")
 u3  = User.find_by(email: "user3@example.com")
 u7  = User.find_by(email: "user7@example.com")
 u16 = User.find_by(email: "user16@example.com")
 
-# 3. Δημιουργία των Posts (Συζητήσεις)
 if u1 && u3 && u7 && u16
   puts "📝 Δημιουργία συζητήσεων..."
 
