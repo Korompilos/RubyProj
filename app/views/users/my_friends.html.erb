@@ -7,41 +7,45 @@
   </div>
 
   <% if @friends.any? %>
-    <%= form_with url: rooms_path, method: :post, id: "group-chat-form", data: { turbo: false } do |f| %>
-      <div class="posts-feed">
-        <% @friends.each do |friend| %>
-          <div class="post-card shadow-sm border-0 mb-3 p-3 animate-fadeIn" style="display: flex; align-items: center; justify-content: space-between; background: white; border-radius: 16px;">
-            
-            <div style="display: flex; align-items: center; gap: 15px;">
-              <div class="form-check">
-                <%= check_box_tag "user_ids[]", friend.id, false, class: "form-check-input", style: "width: 22px; height: 22px; cursor: pointer;" %>
-              </div>
-              
-              <div class="user-badge shadow-sm" style="background: var(--bg-gradient); color: white; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold;">
-                <%= friend.email[0].upcase %>
-              </div>
-              
-              <div>
-                <strong class="d-block text-dark"><%= friend.email %></strong>
-                <div style="font-size: 0.8rem; color: #28a745;">● Online</div>
-              </div>
+    <%= form_with url: rooms_path, method: :post, id: "group-chat-form", html: { style: "display:none;" } do |f| %>
+    <% end %>
+
+    <div class="posts-feed">
+      <% @friends.each do |friend| %>
+        <div class="post-card shadow-sm border-0 mb-3 p-3 animate-fadeIn" style="display: flex; align-items: center; justify-content: space-between; background: white; border-radius: 16px;">
+          
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="form-check">
+              <%= check_box_tag "user_ids[]", friend.id, false, class: "form-check-input", form: "group-chat-form", style: "width: 22px; height: 22px; cursor: pointer;" %>
             </div>
             
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <%= link_to user_path(friend), class: "btn btn-primary btn-sm rounded-pill px-3 text-decoration-none shadow-sm" do %>
-                <i class="bi bi-chat-fill"></i> Message
-              <% end %>
-              
-              <%= link_to friendship_path(friend), 
-                  data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, 
-                  class: "btn btn-outline-danger btn-sm rounded-pill px-3 shadow-sm text-decoration-none" do %>
-                <i class="bi bi-person-x-fill"></i> Remove
-              <% end %>
+            <div class="user-badge shadow-sm" style="background: var(--bg-gradient); color: white; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold;">
+              <%= friend.email[0].upcase %>
+            </div>
+            
+            <div>
+              <strong class="d-block text-dark"><%= friend.email %></strong>
+              <div style="font-size: 0.8rem; color: #28a745;">● Online</div>
             </div>
           </div>
-        <% end %>
-      </div>
-    <% end %>
+          
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <%# Message Button %>
+            <%= link_to user_path(friend), class: "btn btn-primary btn-sm rounded-pill px-3 text-decoration-none shadow-sm" do %>
+              <i class="bi bi-chat-fill"></i> Message
+            <% end %>
+            
+            <% friendship = current_user.friendships.find_by(friend_id: friend.id) %>
+            
+            <% if friendship %>
+              <%= button_to friendship_path(friendship), method: :delete, form: { style: "display:inline-block;" }, class: "btn btn-outline-danger btn-sm rounded-pill px-3 shadow-sm text-decoration-none", data: { confirm: "Are you sure?" } do %>
+                <i class="bi bi-person-x-fill"></i> Remove
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
 
     <div class="sticky-bottom bg-white p-3 border-top mt-4 shadow-lg rounded-4 d-flex justify-content-between align-items-center" style="z-index: 1050;">
       <div class="ps-2">

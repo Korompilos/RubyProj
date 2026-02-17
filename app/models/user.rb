@@ -3,6 +3,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2, :facebook]
 
+  has_and_belongs_to_many :rooms
+
   has_many :posts, dependent: :destroy
 
   has_many :friendships, dependent: :destroy

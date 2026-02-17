@@ -81,24 +81,7 @@
   <% end %>
 
   <div class="d-flex flex-grow-1">
-    <% if user_signed_in? && !devise_controller? %>
-      <aside class="sidebar d-none d-md-block shadow-sm">
-        <div class="py-4 sticky-top" style="top: 70px;">
-          <div class="px-4 mb-3 text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">Menu</div>
-          <nav class="nav flex-column">
-            <%= link_to posts_path, class: "nav-link #{'active' if current_page?(posts_path)}" do %>
-              <i class="bi bi-grid-1x2 me-2"></i> All Posts
-            <% end %>
-            <%= link_to my_friends_path, class: "nav-link #{'active' if current_page?(my_friends_path)}" do %>
-              <i class="bi bi-people me-2"></i> My Friends
-            <% end %>
-            <%= link_to find_friends_path, class: "nav-link #{'active' if current_page?(find_friends_path)}" do %>
-              <i class="bi bi-person-plus me-2"></i> Find Friends
-            <% end %>
-          </nav>
-        </div>
-      </aside>
-    <% end %>
+    
 
     <main class="content-area w-100">
       <div class="<%= devise_controller? ? 'container d-flex justify-content-center align-items-center' : 'container-fluid' %>" style="<%= 'min-height: 80vh;' if devise_controller? %>">

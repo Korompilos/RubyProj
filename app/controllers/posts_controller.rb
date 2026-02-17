@@ -16,6 +16,8 @@ class PostsController < ApplicationController
     end
 
     @post = Post.new
+
+    @recent_activity = Post.order(created_at: :desc).limit(4)
   end
 
   def create

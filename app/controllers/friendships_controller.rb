@@ -1,24 +1,33 @@
 class FriendshipsController < ApplicationController
+  
   def create
-    @friend = User.find(params[:friend_id])
-    @friendship = current_user.friendships.build(friend_id: @friend.id)
+    friend_id = params[:friend_id]
+    @friendship = current_user.friendships.build(friend_id: friend_id)
+    
     if @friendship.save
-      redirect_back(fallback_location: root_path, notice: "Added to your friends!")
+      unless Friendship.exists?(user_id: friend_id, friend_id: current_user.id)
+        Friendship.create(user_id: friend_id, friend_id: current_user.id)
+      end
+
+      flash[:notice] = "Ο χρήστης προστέθηκε στους φίλους σας."
+    else
+      flash[:alert] = "Δεν ήταν δυνατή η προσθήκη του φίλου."
     end
+    
+    redirect_back(fallback_location: my_friends_path)
   end
 
   def destroy
-    @friendship = Friendship.where(user_id: current_user.id, friend_id: params[:id])
-                          .or(Friendship.where(user_id: params[:id], friend_id: current_user.id))
-                          .first
+    @friendship = current_user.friendships.find(params[:id])
+    friend = @friendship.friend
+    
+    inverse_friendship = Friendship.find_by(user: friend, friend: current_user)
+    
+    @friendship.destroy
+    inverse_friendship&.destroy 
 
-    if @friendship
-      @friendship.destroy
-      flash[:notice] = "Removed from your friends."
-    else
-      flash[:alert] = "Friendship not found."
-    end
-
-    redirect_back(fallback_location: root_path)
+    flash[:notice] = "Friend removed :(."
+    redirect_back(fallback_location: my_friends_path)
   end
+
 end

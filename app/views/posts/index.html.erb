@@ -1,92 +1,340 @@
-<div class="portal-container">
+<div class="dashboard-grid">
   
-  <h1>Lab Manager Portal</h1>
-
-  <!-- Search Bar -->
-  <div class="search-bar">
-    <%= form_with url: posts_path, method: :get, local: true, class: "flex-search" do |f| %>
-      <%= f.text_field :query, 
-          placeholder: "Search text in posts...", 
-          value: params[:query], 
-          class: "search-input" %>
-      
-      <%= f.select :category, 
-          @lessons, 
-          { include_blank: "All Courses", selected: params[:category] }, 
-          { class: "search-select" } %>
-      
-      <button type="submit" class="search-btn">
-        Search
-      </button>
-      
-      <% if params[:query].present? || params[:category].present? %>
-        <%= link_to "Clear", posts_path, class: "clear-link" %>
-      <% end %>
-    <% end %>
-  </div>
-
-  <!-- New Post Card -->
-  <div class="new-post-card">
-    <h3>What are you thinking?</h3>
-    <%= form_with(model: @post) do |f| %>
-      <%= f.text_area :content, 
-          placeholder: "Share your thought...", 
-          rows: 4 %>
-      
-      <div class="post-actions">
+  <main class="feed-column">
+    
+    <div class="glass-card search-area animate-fadeIn">
+      <%= form_with url: posts_path, method: :get, local: true, class: "flex-search-container" do |f| %>
+        <%= f.text_field :query, 
+            placeholder: "Search in the feed...", 
+            value: params[:query], 
+            class: "search-input-field" %>
+        
         <%= f.select :category, 
             @lessons, 
-            { prompt: "Select Course" }, 
-            { class: "styled-select" } %>
+            { include_blank: "All courses", selected: params[:category] }, 
+            { class: "search-select-field" } %>
         
-        <%= f.submit "Post", class: "btn-primary" %>
-      </div>
-    <% end %>
-  </div>
+        <button type="submit" class="search-submit-btn">
+          <i class="bi bi-search"></i>
+        </button>
+        
+        <% if params[:query].present? || params[:category].present? %>
+          <%= link_to "Clear", posts_path, class: "clear-search-link" %>
+        <% end %>
+      <% end %>
+    </div>
 
-  <!-- Posts Feed -->
-  <div class="posts-feed">
-    <% if @posts.any? %>
-      <% @posts.each do |post| %>
-        <div class="post-card">
-          <!-- Post Header -->
-          <div class="post-header">
-            <div class="user-badge">
-              <%= post.user.email[0].upcase %>
-            </div>
-            <div class="user-info">
-              <strong><%= post.user.email.split('@').first %></strong>
-              <small><%= time_ago_in_words(post.created_at) %> ago</small>
-            </div>
-            <span class="category-tag">
-              <%= post.category %>
-            </span>
-          </div>
+    <div class="glass-card new-post-card animate-fadeIn" style="animation-delay: 0.1s;">
+      <h4 class="fw-bold mb-3">What are you thinking about?</h4>
+      <%= form_with(model: @post) do |f| %>
+        <%= f.text_area :content, 
+            placeholder: "Share something with your friends...", 
+            rows: 3, 
+            class: "post-textarea" %>
+        
+        <div class="post-actions-row">
+          <%= f.select :category, 
+              @lessons, 
+              { prompt: "Select course" }, 
+              { class: "category-styled-select" } %>
           
-          <!-- Post Body -->
-          <div class="post-body">
-            <%= simple_format(post.content) %>
-          </div>
-
-          <!-- Post Actions (Edit/Delete) -->
-          <% if post.user == current_user %>
-            <div class="post-actions-buttons">
-              <%= link_to "Edit", edit_post_path(post), class: "btn-edit" %>
-              <%= button_to "Delete", 
-                  post_path(post), 
-                  method: :delete, 
-                  data: { confirm: "Are you sure?" }, 
-                  class: "btn-delete" %>
-            </div>
-          <% end %>
+          <%= f.submit "Post", class: "btn-primary-glow" %>
         </div>
       <% end %>
-    <% else %>
-      <div class="empty-state">
-        <h3>📭 No posts yet...</h3>
-        <p>Be the first to post!</p>
-      </div>
-    <% end %>
-  </div>
+    </div>
 
+    <div class="posts-feed-container">
+      <% if @posts.any? %>
+        <% @posts.each do |post| %>
+          <div class="post-card animate-fadeIn">
+            <div class="post-header">
+              <div class="user-badge">
+                <%= post.user.email[0].upcase %>
+              </div>
+              <div class="user-info">
+                <strong><%= post.user.email.split('@').first %></strong>
+                <small><%= time_ago_in_words(post.created_at) %> ago</small>
+              </div>
+              <span class="category-tag">
+                <%= post.category %>
+              </span>
+            </div>
+            
+            <div class="post-body">
+              <%= simple_format(post.content) %>
+            </div>
+
+            <% if post.user == current_user %>
+              <div class="post-management-buttons">
+                <%= link_to edit_post_path(post), class: "btn-edit-action" do %>
+                  <i class="bi bi-pencil-square"></i> Edit
+                <% end %>
+                <%= button_to post_path(post), 
+                    method: :delete, 
+                    data: { confirm: "Are you sure?" }, 
+                    class: "btn-delete-action" do %>
+                  <i class="bi bi-trash"></i> Delete
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-state-card glass-card">
+          <h3>The feed is empty...</h3>
+          <p>Be the first to post!</p>
+        </div>
+      <% end %>
+    </div>
+  </main>
+
+  <aside class="sidebar-column">
+
+  <section class="glass-card notification-card animate-fadeIn">
+        <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-2">
+          <i class="bi bi-bell-fill text-warning"></i>
+          <h6 class="fw-bold m-0 text-dark">Νέα Δραστηριότητα</h6>
+        </div>
+
+        <div class="activity-list">
+          <% if @recent_activity.any? %>
+            <% @recent_activity.each do |activity| %>
+              <%= link_to post_path(activity), class: "activity-item" do %>
+                
+                <div class="activity-avatar">
+                  <%= activity.user.email[0].upcase %>
+                </div>
+
+                <div class="activity-info">
+                  <p class="m-0 activity-text">
+                    <span class="fw-bold text-dark"><%= activity.user.email.split('@').first %></span>
+                    <span class="text-muted">δημοσίευσε στο</span>
+                  </p>
+                  <div class="d-flex align-items-center gap-2 mt-1">
+                    <span class="badge bg-light text-primary border border-primary-subtle" style="font-size: 0.65rem;">
+                      <%= activity.category %>
+                    </span>
+                    <small class="text-muted x-small-text">
+                      <%= time_ago_in_words(activity.created_at) %> πριν
+                    </small>
+                  </div>
+                </div>
+
+              <% end %>
+            <% end %>
+          <% else %>
+            <p class="text-muted small text-center my-2">Καμία πρόσφατη δραστηριότητα.</p>
+          <% end %>
+        </div>
+      </section>
+    
+    <section class="glass-card sidebar-box animate-fadeIn">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold m-0"><i class="bi bi-chat-dots-fill me-2 text-primary"></i>Chats</h5>
+        <span class="badge bg-primary rounded-pill"><%= (@my_private_chats&.count || 0) + (@my_group_chats&.count || 0) %></span>
+      </div>
+      
+      <div class="mini-scroll-area">
+        <% if (@my_private_chats + @my_group_chats).any? %>
+          <% (@my_private_chats + @my_group_chats).each do |room| %>
+            <%= link_to room_path(room), class: "sidebar-item-link" do %>
+              <div class="mini-avatar"><%= room.name[0].upcase %></div>
+              <div class="flex-grow-1">
+                <div class="small fw-bold text-dark"><%= room.display_name(current_user) %></div>
+              </div>
+              <div class="status-dot-online"></div>
+            <% end %>
+          <% end %>
+        <% else %>
+          <p class="text-muted small text-center my-3">No chats</p>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="glass-card sidebar-box animate-fadeIn" style="animation-delay: 0.1s;">
+      <h5 class="fw-bold mb-3"><i class="bi bi-people-fill me-2 text-success"></i>Contacts</h5>
+      
+      <%= form_with url: rooms_path, method: :post, id: "group-chat-form" do |f| %>
+        <div class="mini-scroll-area">
+          <% if @friends&.any? %>
+            <% @friends.each do |friend| %>
+              <div class="friend-list-row">
+                <label class="friend-checkbox-label">
+                  <%= check_box_tag "user_ids[]", friend.id, false, class: "form-check-input" %>
+                  <span><%= friend.email.split('@').first %></span>
+                </label>
+                <%= link_to user_path(friend), class: "direct-chat-icon" do %>
+                  <i class="bi bi-chat-left-text-fill"></i>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-sm w-100 rounded-pill mt-3 fw-bold shadow-sm py-2">
+          <i class="bi bi-plus-circle me-1"></i>Create Group Chat
+        </button>
+      <% end %>
+
+      <%= link_to my_friends_path, class: "btn btn-outline-secondary btn-sm w-100 rounded-pill mt-2 fw-bold py-2" do %>
+        <i class="bi bi-person-lines-fill me-1"></i>All my contacts
+      <% end %>
+    </section>
+
+    <section class="discover-gradient-card animate-fadeIn" style="animation-delay: 0.2s;">
+      <h5 class="fw-bold mb-1">Add Friends</h5>
+      <p class="x-small-text mb-3">Search for new friends.</p>
+      <%= link_to find_friends_path, class: "btn btn-light btn-sm w-100 rounded-pill fw-bold text-primary" do %>
+        <i class="bi bi-search me-1"></i>Search
+      <% end %>
+    </section>
+
+  </aside>
 </div>
+
+<style>
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 35px;
+    max-width: 1400px; 
+    margin: 40px auto;
+    padding: 0 30px;
+  }
+
+  .btn-primary-glow {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.notification-card {
+  border-top: 4px solid #ffc107; 
+  padding: 20px;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 12px;
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+  align-items: flex-start;
+}
+
+.activity-item:hover {
+  background: #f8f9fa;
+}
+
+.activity-avatar {
+  width: 32px;
+  height: 32px;
+  min-width: 32px; 
+  background: #e9ecef;
+  color: #495057;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.activity-info {
+  flex-grow: 1;
+}
+
+.activity-text {
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.x-small-text {
+  font-size: 0.7rem;
+}
+
+.btn-primary-glow:hover {
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+  transform: translateY(-1px);
+  background: #0056b3;
+}
+
+  .glass-card {
+    background: white;
+    border-radius: 22px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .flex-search-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .search-input-field { flex: 2; border-radius: 12px; border: 1px solid #eef0f2; padding: 10px 15px; background: #f8f9fa; }
+  .search-select-field { flex: 1; border-radius: 12px; border: 1px solid #eef0f2; padding: 10px; background: #f8f9fa; }
+  .search-submit-btn { background: #007bff; color: white; border: none; padding: 10px 18px; border-radius: 12px; transition: 0.3s; }
+  .search-submit-btn:hover { background: #0056b3; transform: scale(1.05); }
+
+  .post-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #f0f2f5;
+  }
+  .post-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+  .user-badge { width: 45px; height: 45px; background: #007bff; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 1.1rem; }
+  .category-tag { background: #eef2ff; color: #4338ca; padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+  
+  .post-management-buttons { border-top: 1px solid #f1f3f5; margin-top: 15px; padding-top: 12px; display: flex; gap: 20px; }
+  .btn-edit-action { color: #6c757d; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+  .btn-delete-action { background: none; border: none; padding: 0; color: #e03131; font-size: 0.85rem; font-weight: 600; }
+
+  .sidebar-column { position: sticky; top: 30px; height: fit-content; }
+  .sidebar-box { border-left: 5px solid #007bff; }
+  
+  .mini-scroll-area { max-height: 250px; overflow-y: auto; padding-right: 5px; }
+  .sidebar-item-link { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 14px; transition: 0.2s; text-decoration: none; }
+  .sidebar-item-link:hover { background: #f1f3f5; }
+  
+  .mini-avatar { width: 35px; height: 35px; background: #dee2e6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #495057; }
+  .status-dot-online { width: 10px; height: 10px; background: #40c057; border-radius: 50%; border: 2px solid white; }
+
+  .friend-list-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 12px; transition: 0.2s; }
+  .friend-list-row:hover { background: #f8f9fa; }
+  .friend-checkbox-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
+
+  .discover-gradient-card {
+    background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+    color: white;
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 10px 25px rgba(102, 16, 242, 0.25);
+  }
+  .x-small-text { font-size: 0.75rem; opacity: 0.85; }
+
+  .animate-fadeIn { animation: fadeIn 0.5s ease-out backwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 1100px) {
+    .dashboard-grid { grid-template-columns: 1fr; padding: 0 20px; }
+    .sidebar-column { position: static; }
+  }
+</style>
