@@ -18,9 +18,17 @@ class PostsController < ApplicationController
     @posts = @posts.page(params[:page]).per(5)
 
     @post = Post.new
-    @recent_activity = Post.order(created_at: :desc).limit(4)
-
+    
+    
+    recent_posts = Post.where.not(user_id: current_user.id).order(created_at: :desc).limit(6)
+    
     my_room_ids = Participant.where(user_id: current_user.id).pluck(:room_id)
+    recent_messages = Message.where(room_id: my_room_ids)
+                             .where.not(user_id: current_user.id)
+                             .order(created_at: :desc)
+                             .limit(5)
+    
+    @recent_activity = (recent_posts + recent_messages).sort_by(&:created_at).reverse.first(6)
 
     all_my_rooms = Room.where(id: my_room_ids)
 

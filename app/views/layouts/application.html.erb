@@ -95,7 +95,7 @@
       <div class="<%= devise_controller? ? 'container d-flex justify-content-center align-items-center' : 'container-fluid' %>" style="<%= 'min-height: 80vh;' if devise_controller? %>">
         <div class="<%= 'main-card' unless devise_controller? %> w-100">
           
-          <% if user_signed_in? && !current_page?(root_path) && !devise_controller? %>
+          <% if user_signed_in? && !current_page?(root_path) && !current_page?(posts_path) && !devise_controller? %>
             <div class="mb-4 animate-fadeIn">
               <%= link_to root_path, class: "btn-back-global" do %>
                 <i class="bi bi-arrow-left-circle-fill"></i> Back to Dashboard

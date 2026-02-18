@@ -96,39 +96,65 @@
   <section class="glass-card notification-card animate-fadeIn">
         <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-2">
           <i class="bi bi-bell-fill text-warning"></i>
-          <h6 class="fw-bold m-0 text-dark">Recent activity</h6>
+          <h6 class="fw-bold m-0 text-dark">Notifications</h6>
         </div>
 
-        <div class="activity-list">
-          <% if @recent_activity.any? %>
-            <% @recent_activity.each do |activity| %>
-              <%= link_to post_path(activity), class: "activity-item" do %>
+        <%= turbo_frame_tag "recent_activity_frame", data: { controller: "poll" } do %>
+          
+          <div class="activity-list">
+            <% if @recent_activity.any? %>
+              <% @recent_activity.each do |activity| %>
                 
-                <div class="activity-avatar">
-                  <%= activity.user.email[0].upcase %>
-                </div>
+                <% if activity.is_a?(Post) %>
+                  <%= link_to post_path(activity), class: "activity-item" do %>
+                    <div class="activity-avatar">
+                      <%= activity.user.email[0].upcase %>
+                    </div>
+                    <div class="activity-info">
+                      <p class="m-0 activity-text">
+                        <span class="fw-bold text-dark"><%= activity.user.email.split('@').first %></span>
+                        <span class="text-muted">posted at</span>
+                      </p>
+                      <div class="d-flex align-items-center gap-2 mt-1">
+                        <span class="badge bg-light text-primary border border-primary-subtle" style="font-size: 0.65rem;">
+                          <%= activity.category %>
+                        </span>
+                        <small class="text-muted x-small-text ms-auto">
+                          <%= time_ago_in_words(activity.created_at) %>
+                        </small>
+                      </div>
+                    </div>
+                  <% end %>
 
-                <div class="activity-info">
-                  <p class="m-0 activity-text">
-                    <span class="fw-bold text-dark"><%= activity.user.email.split('@').first %></span>
-                    <span class="text-muted">posted at</span>
-                  </p>
-                  <div class="d-flex align-items-center gap-2 mt-1">
-                    <span class="badge bg-light text-primary border border-primary-subtle" style="font-size: 0.65rem;">
-                      <%= activity.category %>
-                    </span>
-                    <small class="text-muted x-small-text">
-                      <%= time_ago_in_words(activity.created_at) %> ago
-                    </small>
-                  </div>
-                </div>
+                <% elsif activity.is_a?(Message) %>
+                  <%= link_to room_path(activity.room), class: "activity-item" do %>
+                    <div class="activity-avatar" style="background: #e6f2ff; color: #007bff;">
+                      <i class="bi bi-chat-dots-fill"></i>
+                    </div>
+                    <div class="activity-info">
+                      <p class="m-0 activity-text">
+                        <span class="fw-bold text-dark"><%= activity.user.email.split('@').first %></span>
+                        <span class="text-muted">sent a message:</span>
+                      </p>
+                      <div class="d-flex align-items-center mt-1">
+                        <span class="text-dark fst-italic" style="font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;">
+                          "<%= activity.content %>"
+                        </span>
+                        <small class="text-muted x-small-text ms-auto">
+                          <%= time_ago_in_words(activity.created_at) %>
+                        </small>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
 
               <% end %>
+            <% else %>
+              <p class="text-muted small text-center my-2">No notifications.</p>
             <% end %>
-          <% else %>
-            <p class="text-muted small text-center my-2">No recent activity.</p>
-          <% end %>
-        </div>
+          </div>
+          
+        <% end %>
       </section>
     
     <section class="glass-card sidebar-box animate-fadeIn">
